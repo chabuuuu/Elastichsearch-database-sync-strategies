@@ -9,6 +9,7 @@ psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
     \c employee_db;
     \i home/setup.sql;
     \i home/seed.sql;
+    \i home/trigger-init.sql;
 
     ALTER TABLE public.employee REPLICA IDENTITY FULL;
 

@@ -8,5 +8,62 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=pgadmin
+    volumes:
+      - 'postgres-trigger-strategy-data:/var/lib/postgresql/data'
+
+  zookeeper-trigger-strategy:
+    image: zookeeper:latest
+    restart: always
+    ports:
+      - "2181:2181"
+      - "2888:2888"
+      - "3888:3888"
+
+  kafka-trigger-strategy:
+    image: bitnami/kafka:3.4
+    restart: always
+    links:
+      - zookeeper-trigger-strategy
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper-trigger-strategy:2181
+    ports:
+      - "9092:9092"
+
+  kafka-ui-trigger-strategy:
+    image: provectuslabs/kafka-ui:latest
+    restart: always
+    ports:
+      - "8080:8080"
+    links:
+      - kafka-trigger-strategy
+    environment:
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    volumes:
+      - kafka-ui-trigger-strategy-data:/etc/kafkaui
+
+  event-producer-worker:
+    build: ./worker/event-producer
+    restart: always
+    depends_on:
+      - kafka-trigger-strategy
+      - postgres-trigger-strategy
+    links:
+      - kafka-trigger-strategy
+      - postgres-trigger-strategy
+    environment:
+      - database=employee_db
+      - user=postgres
+      - password=pgadmin
+      - port=5432
+      - host=postgres-trigger-strategy
+      - KAFKA_BROKER=kafka-trigger-strategy:9092
+
+volumes:
+   postgres-trigger-strategy-data:
+       name: postgres-trigger-strategy-data
+       driver: local
+   kafka-ui-trigger-strategy-data:
+        name: kafka-ui-trigger-strategy-data
+        driver: local

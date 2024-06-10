@@ -1,4 +1,5 @@
 const pool = require('../../pool/pool.init')
+const kafkaProducer = require('../../kafka/producer.instance')
 
 //Insert new employee data event handle
 async function insertHandle() {
@@ -12,6 +13,15 @@ async function insertHandle() {
       const employeeData = data.payload || "";
       const formatEmployeeData = JSON.parse(employeeData);
       console.log("Employee insert data:", formatEmployeeData);
+
+      await kafkaProducer.connect()
+      await kafkaProducer.send({
+        topic: 'test-topic',
+        messages: [
+          { value: 'Hello KafkaJS user!' },
+        ],
+      })
+      console.log("Message sent successfully");
     });
 }
 

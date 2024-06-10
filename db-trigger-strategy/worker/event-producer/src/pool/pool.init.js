@@ -1,9 +1,12 @@
 const Pool = require("pg-pool");
 
+console.log("this is host", process.env.host);
+
 var pool = new Pool({
   database: process.env.database || "postgres",
   user: process.env.user || "postgres",
   password: process.env.password || "pgadmin",
+  host: process.env.host || "localhost",
   port: Number(process.env.port) || 5432,
   max: 20, // set pool max size to 20
   idleTimeoutMillis: 1000, // close idle clients after 1 second
