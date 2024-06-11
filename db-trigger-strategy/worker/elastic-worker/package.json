@@ -1,0 +1,17 @@
+{
+  "name": "event-consumer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@elastic/elasticsearch": "^7.10.0",
+    "dotenv": "^16.4.5",
+    "kafkajs": "^2.2.4"
+  }
+}
