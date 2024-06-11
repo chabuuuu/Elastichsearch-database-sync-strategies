@@ -14,11 +14,13 @@ async function insertHandle() {
       const formatEmployeeData = JSON.parse(employeeData);
       console.log("Employee insert data:", formatEmployeeData);
 
+      //Send message to kafka topic
       await kafkaProducer.connect()
+      const msg = { data: formatEmployeeData }
       await kafkaProducer.send({
-        topic: 'test-topic',
+        topic: 'new-employee-inserted',
         messages: [
-          { value: 'Hello KafkaJS user!' },
+          { value: JSON.stringify(msg) },
         ],
       })
       console.log("Message sent successfully");

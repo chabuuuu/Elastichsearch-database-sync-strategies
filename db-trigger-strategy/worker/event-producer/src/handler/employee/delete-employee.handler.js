@@ -1,4 +1,5 @@
 const pool = require('../../pool/pool.init')
+const kafkaProducer = require('../../kafka/producer.instance')
 
 //Delete employee data event handle
 async function deleteHandle() {
@@ -12,6 +13,17 @@ async function deleteHandle() {
     const employeeData = data.payload || "";
     const formatEmployeeData = JSON.parse(employeeData);
     console.log("Employee delete data:", formatEmployeeData);
+
+    //Send message to kafka topic
+    await kafkaProducer.connect()
+    const msg =  { id: formatEmployeeData.id }
+    await kafkaProducer.send({
+      topic: 'employee-deleted',
+      messages: [
+        { value: JSON.stringify(msg)}
+      ],
+    })
+    console.log("Message sent successfully");
   });
 }
 
