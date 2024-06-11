@@ -1,4 +1,4 @@
-const { Kafka } = require('kafkajs')
+const { Kafka } = require('../../../elastic-worker/node_modules/kafkajs/types')
 
 console.log("this is broker", process.env.KAFKA_BROKER);
 
