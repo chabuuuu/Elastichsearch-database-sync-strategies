@@ -2,10 +2,11 @@ require('dotenv').config()
 const employeeUpdatedTopic = require('./topic-consumer/employee-updated.topic')
 const kafkaProducer = require('./kafka/producer.instance')
 const allEmployeeDataTopic = require('./topic-consumer/allEmployeeData.topic')
-
+const newEmployeeInsertedTopic = require('./topic-consumer/new-employee-inserted.topic')
 
 //Init topic consumer
 employeeUpdatedTopic()
+newEmployeeInsertedTopic()
 allEmployeeDataTopic()
 
 //First sync between Elastic & Postgres when startup
