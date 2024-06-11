@@ -23,12 +23,16 @@ class elasticService {
 
     async insert(data, index){
         console.log('Inserting data to elastic search', data)
-        elasticClient.create({
-            index: index,
-            body: 
-            {
-              document: JSON.parse(data)
-            }
+        // elasticClient.create({
+        //     index: index,
+        //     body: 
+        //     {
+        //       document: data
+        //     }
+        // })
+
+        elasticClient.bulk({
+            body: [{ index: { _index: index } }, data]
         })
     }
 
