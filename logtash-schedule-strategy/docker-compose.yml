@@ -2,11 +2,67 @@ version: '3.9'
 
 services:
 
-  postgres-trigger-strategy:
-    build: ./postgresql
+  postgres-logtash-strategy:
+    container_name: postgres-logtash-strategy
+    build:
+      context: ./postgres/
+      dockerfile: Dockerfile
     restart: always
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=employee_db
+      - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=pgadmin
+      - POSTGRES_PORT=5432
+    volumes:
+      - postgresvolume:/var/lib/postgresql/data
+
+  elasticsearch-logtash-strategy:
+    container_name: elasticsearch-logtash-strategy
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.5.3
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - elasticvolume:/usr/share/elasticsearch/data
+
+  logstash-logtash-strategy:
+    container_name: logstash-logtash-strategy
+    build: 
+      context: ./logstash/
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - CONFIG_SUPPORT_ESCAPE=true
+      - ELASTICSEARCH_URL=http://elasticsearch-logtash-strategy:9200
+    depends_on:
+      - elasticsearch-logtash-strategy
+      - postgres-logtash-strategy
+    volumes:
+      - logstashvolume:/usr/share/logstash/data
+
+  kibana-logtash-strategy:
+    container_name: kibana-logtash-strategy
+    image: docker.elastic.co/kibana/kibana:8.5.3
+    ports:
+      - '5601:5601'
+    depends_on:
+      - elasticsearch-logtash-strategy
+    environment:
+      SERVER_NAME: kibana.example.org
+      ELASTICSEARCH_HOSTS: '["http://elasticsearch-logtash-strategy:9200"]'
+
+volumes:
+  postgresvolume:
+  elasticvolume:
+  logstashvolume: 
+
+
+ 
