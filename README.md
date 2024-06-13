@@ -42,7 +42,7 @@ FROM generate_series(1, 10000);
 \+ ElasticsearchSinkConnector: subcribe các topic event change trong Kafka, nhận các dữ liệu mới và cập nhật index lại vào Elasticsearch bằng cách sử dụng kafka-connect-elasticsearch
 
 **1.2 Sử dụng Database Trigger**
-![alt text](media/logtash-strategy-pipeline.png)
+![alt text](media/trigger-strategy-pipeline.png)
 
 **Ý tưởng chính như sau**
 
