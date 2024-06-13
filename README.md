@@ -123,6 +123,8 @@ Resources setting cho docker container:
 | 6.89/12 CPU | 1.9/2.53 GB |
 
 **2.2. TỔNG KẾT**
+
+
 ![alt text](media/cpu-ram-chart.png)
 
 
