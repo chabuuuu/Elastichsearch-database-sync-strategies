@@ -306,6 +306,6 @@ This will return
 ```
 
 ### Notes
-This will catch the database delete record event
+This will NOT catch the database delete record event
 
 Solution: using soft delete, if need hard delete, just delete all the records that have flag "deleted" from both Postgres and Elasticseach
