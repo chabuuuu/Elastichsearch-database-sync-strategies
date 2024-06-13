@@ -11,12 +11,13 @@ docker compose up --build
 ```
 
 As default, this will init the table employee in postgres with folowing records:
-
+```
 1	"jon"	"jon@mail.com"	70000	"SBY"	"2024-06-13 02:11:53.138833"
 2	"wick"	"wick@mail.com"	80000	"JKT"	"2024-06-13 02:11:53.141248"
 3	"mat"	"mat@mail.com"	70000	"SBY"	"2024-06-13 02:11:53.142573"
 4	"sapii"	"sapii@mail.com"	60000	"SBY"	"2024-06-13 02:11:53.144024"
 5	"deno"	"deno@mail.com"	90000	"JKT"	"2024-06-13 02:11:53.145483"
+```
 
 Go to kibana on http://localhost:5601 and test this query:
 GET employee/_search
